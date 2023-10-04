@@ -4,15 +4,28 @@ using UnityEngine;
 
 public class Shooting : MonoBehaviour
 {
-    
     public Weapon weapon;
-    
-    // Update is called once per frame
+    public GameObject firePoint;
+
+    void Start()
+    {
+        weapon = gameObject.AddComponent<BasicWeapon>();
+        weapon.Initialize(firePoint.transform);
+    }
+
     void Update()
     {
         if (Input.GetButtonDown("Fire1"))
         {
-            weapon.Shoot(transform);
+            weapon.Shoot();
         }
+    }
+
+    public void SwapWeapon(Weapon wp)
+    {
+        //TODO: Swap weapon sprite
+        Destroy(weapon);
+        weapon = wp;
+        weapon.Initialize(firePoint.transform);
     }
 }

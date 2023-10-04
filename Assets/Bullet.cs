@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Bullet : MonoBehaviour
 {
     public GameObject explosion;
     public GameObject smoke;
+    public float damage;
     UnityEngine.Camera cam;
-
+    public Text text;
     public Bullet(GameObject explosion, GameObject smoke/*, Camera cam*/)
     {
         this.explosion = explosion;
@@ -56,6 +58,10 @@ public class Bullet : MonoBehaviour
     {
         GameObject effect = Instantiate(explosion, transform.position, Quaternion.identity);
         Destroy(effect, 1f);
+        Text texto = Instantiate(text, transform.position, Quaternion.identity);
+        texto.color = Color.red;
+        texto.text=damage.ToString();
+        Destroy(texto, 1f);
         Destroy(gameObject);
 
         if (collision.collider.CompareTag("Deformable"))

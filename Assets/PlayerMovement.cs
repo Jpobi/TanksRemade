@@ -10,7 +10,6 @@ public class PlayerMovement : MonoBehaviour
 
     public Rigidbody2D rb;
     Vector2 direccionMove;
-    public Weapon initialWeapon;
     
 
     void Update()
@@ -22,12 +21,9 @@ public class PlayerMovement : MonoBehaviour
         //direccionMove.y = Input.GetAxisRaw("Vertical");
     }
 
-    private void Start()
-    {
-        initialWeapon = new BasicWeapon();
-        Debug.Log(initialWeapon.weaponName);
-        gameObject.GetComponentInChildren<Shooting>().weapon = initialWeapon;
-    }
+    //private void Start()
+    //{
+    //}
 
     void FixedUpdate()
     {
