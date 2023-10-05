@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class Shooting : MonoBehaviour
     {
         weapon = gameObject.AddComponent<BasicWeapon>();
         weapon.Initialize(firePoint.transform);
+        gameObject.GetComponent<SpriteRenderer>().sprite = weapon.weaponSprite;
     }
 
     void Update()
@@ -21,11 +23,20 @@ public class Shooting : MonoBehaviour
         }
     }
 
-    public void SwapWeapon(Weapon wp)
+    public void SwapWeapon(string weaponClassName)
     {
-        //TODO: Swap weapon sprite
-        Destroy(weapon);
-        weapon = wp;
-        weapon.Initialize(firePoint.transform);
+        Type weaponType = Type.GetType(weaponClassName);
+
+        if (weaponType != null && typeof(Weapon).IsAssignableFrom(weaponType))
+        {
+            Destroy(weapon);
+            weapon = (Weapon)gameObject.AddComponent(weaponType);
+            weapon.Initialize(firePoint.transform);
+            gameObject.GetComponent<SpriteRenderer>().sprite = weapon.weaponSprite;
+        }
+        else
+        {
+            Debug.LogError("Weapon subclass with the specified name not found.");
+        }
     }
 }

@@ -5,25 +5,6 @@ using UnityEngine;
 
 public static class AssetHelper
 {
-    public static GameObject loadAsset(string path)
-    {
-        return GameObject.Find(path);
-    }
-    public static GameObject loadPrefab(string path)
-    {
-        GameObject myPrefab = Resources.Load<GameObject>(path);
-
-        if (myPrefab == null)
-        {
-            Debug.LogError("Prefab not found in Resources folder.");
-        }
-
-        return myPrefab;
-        //// Instantiate the prefab
-        //GameObject instantiatedPrefab = GameObject.Instantiate(myPrefab);
-        //return instantiatedPrefab;
-    }
-
     public static Vector2 rotate(Vector2 v, float delta)
     {
         return new Vector2(

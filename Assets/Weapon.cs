@@ -7,7 +7,6 @@ public abstract class Weapon : MonoBehaviour
     public int damage;
     public string weaponName;
     public Sprite weaponSprite;
-    public Bullet bullet;
     public Transform firePoint;
     public GameObject bulletPrefab;
     public float bulletForce;
@@ -22,8 +21,9 @@ public class BasicWeapon : Weapon
     {
         this.damage = 10;
         this.weaponName = "Basic Cannon";
+        this.weaponSprite = Resources.Load<Sprite>("basic_red");
         this.firePoint = firePoint;
-        this.bulletPrefab = Resources.Load<GameObject>("bullet-2"); // Load prefab from Resources folder
+        this.bulletPrefab = Resources.Load<GameObject>("bullet-1");
         this.bulletForce = 10;
     }
 
@@ -41,8 +41,9 @@ public class Shotgun : Weapon
     {
         this.damage = 20;
         this.weaponName = "Basic Cannon";
+        this.weaponSprite = Resources.Load<Sprite>("basic_black");
         this.firePoint = firePoint;
-        this.bulletPrefab = Resources.Load<GameObject>("bullet-2"); // Load prefab from Resources folder
+        this.bulletPrefab = Resources.Load<GameObject>("bullet-1"); // Load prefab from Resources folder
         this.bulletForce = 10;
     }
 
@@ -55,15 +56,15 @@ public class Shotgun : Weapon
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
         rb.AddForce(force, ForceMode2D.Impulse);
 
-        bullet = Instantiate(bulletPrefab, firePoint.position + (firePoint.transform.right * 0.5f), firePoint.rotation);
+        bullet = Instantiate(bulletPrefab, firePoint.position + (firePoint.transform.right * 0.4f), firePoint.rotation);
         bullet.GetComponent<Bullet>().damage = damage;
         rb = bullet.GetComponent<Rigidbody2D>();
-        rb.AddForce(Quaternion.Euler(0, 0, -45) * force, ForceMode2D.Impulse);
+        rb.AddForce(Quaternion.Euler(0, 0, -33) * force, ForceMode2D.Impulse);
 
-        bullet = Instantiate(bulletPrefab, firePoint.position - (firePoint.transform.right * 0.5f), firePoint.rotation);
+        bullet = Instantiate(bulletPrefab, firePoint.position - (firePoint.transform.right * 0.4f), firePoint.rotation);
         bullet.GetComponent<Bullet>().damage = damage;
         rb = bullet.GetComponent<Rigidbody2D>();
-        rb.AddForce(Quaternion.Euler(0, 0, 45) * force, ForceMode2D.Impulse);
+        rb.AddForce(Quaternion.Euler(0, 0, 33) * force, ForceMode2D.Impulse);
 
     }
 }

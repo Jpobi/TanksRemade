@@ -9,7 +9,7 @@ public class Bullet : MonoBehaviour
     public GameObject smoke;
     public float damage;
     UnityEngine.Camera cam;
-    public Text text;
+    public GameObject text;
     public Bullet(GameObject explosion, GameObject smoke/*, Camera cam*/)
     {
         this.explosion = explosion;
@@ -58,9 +58,9 @@ public class Bullet : MonoBehaviour
     {
         GameObject effect = Instantiate(explosion, transform.position, Quaternion.identity);
         Destroy(effect, 1f);
-        Text texto = Instantiate(text, transform.position, Quaternion.identity);
-        texto.color = Color.red;
-        texto.text=damage.ToString();
+        GameObject texto = Instantiate(text, transform.position, Quaternion.identity);
+        texto.GetComponent<TextMesh>().color = Color.red;
+        texto.GetComponent<TextMesh>().text=damage.ToString();
         Destroy(texto, 1f);
         Destroy(gameObject);
 

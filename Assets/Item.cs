@@ -12,8 +12,8 @@ public abstract class Item : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             ApplyTo(other.gameObject);
-            //gameObject.SetActive(false);
-            Destroy(gameObject);
+            gameObject.SetActive(false);
+            //Destroy(gameObject);
         }
     }
 }
