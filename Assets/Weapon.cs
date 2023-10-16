@@ -24,7 +24,7 @@ public class BasicWeapon : Weapon
         this.weaponSprite = Resources.Load<Sprite>("basic_red");
         this.firePoint = firePoint;
         this.bulletPrefab = Resources.Load<GameObject>("bullet-1");
-        this.bulletForce = 10;
+        this.bulletForce = 15;
     }
 
     public override void Shoot()
@@ -43,7 +43,7 @@ public class Shotgun : Weapon
         this.weaponName = "Basic Cannon";
         this.weaponSprite = Resources.Load<Sprite>("basic_black");
         this.firePoint = firePoint;
-        this.bulletPrefab = Resources.Load<GameObject>("bullet-1"); // Load prefab from Resources folder
+        this.bulletPrefab = Resources.Load<GameObject>("bullet-1");
         this.bulletForce = 10;
     }
 

@@ -6,23 +6,23 @@ using UnityEngine;
 [RequireComponent(typeof(PolygonCollider2D))]
 public class DeformableCollider : MonoBehaviour
 {
-    private PolygonCollider2D colisionado;
+    private PolygonCollider2D deformableCol;
     private Vector2[] originalVertices;
 
     public Material material;
 
     void Start()
     {
-        colisionado = GetComponent<PolygonCollider2D>();
+        deformableCol = GetComponent<PolygonCollider2D>();
         material.color = Color.grey;
         GetComponent<MeshRenderer>().material=material;
-        originalVertices = colisionado.points; // Store the original collider vertices
+        originalVertices = deformableCol.points; // Store the original collider vertices
         UpdateMesh();
     }
 
     public void Deform(Vector2 impactPoint, Vector3 direction, float deformationRadius)
     {
-        originalVertices = colisionado.points;
+        originalVertices = deformableCol.points;
         Vector2 localImpactPoint = ConvertWorldToLocal(impactPoint);
 
         //Calculate the affected vertices and deform them
@@ -44,16 +44,16 @@ public class DeformableCollider : MonoBehaviour
         newVertices.Insert(indexBefore,newVertex);
 
         // Update the collider's shape with the modified vertices
-        colisionado.points = newVertices.ToArray();
-        //colisionado.SetPath(colisionado.pathCount-1, new[] { indexBefore != -1 ? originalVertices[indexBefore - 1] : originalVertices.Last(), indexBefore != -1 && indexBefore != originalVertices.Length - 1 ? originalVertices[indexBefore] : newVertex, originalVertices.First() });
-        colisionado.SetPath(0, OrderPointsClockwise(newVertices));
+        deformableCol.points = newVertices.ToArray();
+        //deformableCol.SetPath(deformableCol.pathCount-1, new[] { indexBefore != -1 ? originalVertices[indexBefore - 1] : originalVertices.Last(), indexBefore != -1 && indexBefore != originalVertices.Length - 1 ? originalVertices[indexBefore] : newVertex, originalVertices.First() });
+        deformableCol.SetPath(0, OrderPointsClockwise(newVertices));
         UpdateMesh();
     }
 
     Vector2 ConvertWorldToLocal(Vector2 worldPoint)
     {
         // Get the inverse of the GameObject's transformation matrix
-        Matrix4x4 inverseTransformMatrix = colisionado.transform.worldToLocalMatrix;
+        Matrix4x4 inverseTransformMatrix = deformableCol.transform.worldToLocalMatrix;
 
         // Convert the world-space point to local-space using the inverse transformation matrix
         Vector2 localPoint = inverseTransformMatrix.MultiplyPoint(worldPoint);
@@ -63,9 +63,9 @@ public class DeformableCollider : MonoBehaviour
 
     int PointsBetween(Vector2 worldPointToFind)
     {
-        Vector2 localPoint = colisionado.transform.InverseTransformPoint(worldPointToFind);
+        Vector2 localPoint = deformableCol.transform.InverseTransformPoint(worldPointToFind);
 
-        Vector2[] colliderPoints = colisionado.points;
+        Vector2[] colliderPoints = deformableCol.points;
         int pointCount = colliderPoints.Length;
 
         for (int i = 0; i < pointCount; i++)
@@ -93,14 +93,14 @@ public class DeformableCollider : MonoBehaviour
     void UpdateMesh()
     {
         MeshFilter meshFilter = GetComponent<MeshFilter>();
-        Mesh mesh = colisionado.CreateMesh(true, true);
+        Mesh mesh = deformableCol.CreateMesh(true, true);
 
 
         Vector3[] scaledVertices = new Vector3[mesh.vertices.Length];
         int[] newTriangles = new int[mesh.triangles.Length+1];
         for (int i = 0; i < scaledVertices.Length; i++)
         {
-            scaledVertices[i] = colisionado.transform.InverseTransformPoint(mesh.vertices[i]);
+            scaledVertices[i] = deformableCol.transform.InverseTransformPoint(mesh.vertices[i]);
             if(i%3 == 0 || i==mesh.vertices.Length-3 || i == mesh.vertices.Length - 2)
             {
                 newTriangles[i] = i;
