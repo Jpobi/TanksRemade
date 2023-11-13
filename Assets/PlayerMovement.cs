@@ -15,19 +15,57 @@ public class PlayerMovement : MonoBehaviour
 
     public Rigidbody2D rb;
     Vector2 direccionMove;
-    public HealthBar healthBar;
+    public SliderBar healthBar;
     public string playerNum;
 
+    //shield
+    public GameObject shieldPrefab;
+    public bool enableShield;
+    public GameObject shieldIcon;
+
+
+    //dash
+    public SliderBar dashBar;
+    public float cooldown = 3f;
+    public float currentCooldown;
     void Update()
     {
-
-        if (Input.GetButtonDown("Debug Reset"))
+        //shield
+        if (enableShield)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            shieldIcon.SetActive(true);
+            if (Input.GetButtonDown("Fire2"))
+            {
+                GameObject shield = Instantiate(shieldPrefab, transform.position, Quaternion.identity);
+                shield.GetComponent<FollowFixedRotation>().target = gameObject;
+                Destroy(shield, 10);
+                enableShield = false;
+            }
         }
+        else
+        {
+            shieldIcon.SetActive(false);
+        }
+
+        
+        //dashing
+        if (currentCooldown > 0)
+        {
+            currentCooldown -= Time.deltaTime;
+        }
+        else if(Input.GetButtonDown("Jump"))
+        {
+            speed += 2f;
+            StartCoroutine(ReduceSpeed());
+            currentCooldown = cooldown;
+        }
+        dashBar.SetValue(currentCooldown);
+        
+
         if (playerNum != null && playerNum!="")
         {
-            rb.rotation += -Input.GetAxisRaw("Horizontal Left " + playerNum) * (Input.GetAxisRaw("Vertical Left " + playerNum) != 0 ? rotatSpeed*0.7f:rotatSpeed);
+            var actualRotatSpeed = (Input.GetAxisRaw("Vertical Left " + playerNum) != 0 ? rotatSpeed * 0.7f : rotatSpeed);
+            rb.rotation += -Input.GetAxisRaw("Horizontal Left " + playerNum) * actualRotatSpeed;
         
             direccionMove = AssetHelper.DegreeToVector2(rb.rotation)* Input.GetAxisRaw("Vertical Left " + playerNum);
         }
@@ -40,12 +78,16 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         health = maxHealth;
-        healthBar.SetMaxHealth(maxHealth);
+        healthBar.SetMaxValue(maxHealth);
+        healthBar.SetValue(health);
+        currentCooldown = cooldown;
+        dashBar.SetMaxValue(cooldown);
+        dashBar.SetValue(currentCooldown);
     }
     public void TakeDamage(float damage)
     {
         this.health -= damage;
-        healthBar.SetHealth(health);
+        healthBar.SetValue(health);
     }
 
     void FixedUpdate()
@@ -54,6 +96,13 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.MovePosition(rb.position + direccionMove * speed * Time.fixedDeltaTime);
         }
+    }
+
+    private IEnumerator ReduceSpeed()
+    {
+        yield return new WaitForSeconds(3f);
+
+        speed -= 2f;
     }
 
 }

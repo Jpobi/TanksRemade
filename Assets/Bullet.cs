@@ -74,10 +74,11 @@ public class Bullet : MonoBehaviour
         {
             GameObject effect = Instantiate(explosion, transform.position, Quaternion.identity);
             Destroy(effect, 1f);
-            GameObject texto = Instantiate(text, transform.position, Quaternion.identity);
-            texto.GetComponent<TextMesh>().color = Color.red;
-            texto.GetComponent<TextMesh>().text = damage.ToString();
-            Destroy(texto, 1f);
+            //GameObject texto = Instantiate(text, transform.position, Quaternion.identity);
+            //texto.GetComponent<TextMesh>().color = Color.red;
+            //texto.GetComponent<TextMesh>().text = damage.ToString();
+            //Destroy(texto, 1f);
+            AssetHelper.ShowText(transform.position+new Vector3(0,1.5f,0), Color.red,40, damage.ToString());
             Destroy(gameObject);
         }
         if (collision.collider.CompareTag("Deformable"))
@@ -93,6 +94,10 @@ public class Bullet : MonoBehaviour
         else if (collision.collider.CompareTag("Player"))
         {
             collision.collider.GetComponent<PlayerMovement>().TakeDamage(damage);
+        }
+        else if (collision.collider.CompareTag("Enemy"))
+        {
+            collision.collider.GetComponent<EnemyAI>().TakeDamage(damage);
         }
     }
 }

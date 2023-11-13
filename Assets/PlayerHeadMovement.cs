@@ -10,7 +10,7 @@ public class PlayerHeadMovement : MonoBehaviour
     public Camera cam;
     Vector2 aim;
     Vector2 mousePos;
-    string playerNum;
+    public string playerNum;
 
     // Start is called before the first frame update
     void Start()

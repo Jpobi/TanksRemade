@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Deformable
   - Shield
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -14,8 +15,8 @@ TagManager:
   - Water
   - UI
   - Projectile
-  - 
-  - 
+  - Obstacle
+  - Enemy
   - 
   - 
   - 
@@ -43,9 +44,9 @@ TagManager:
   - name: Background
     uniqueID: 2895841381
     locked: 0
-  - name: UI
-    uniqueID: 3907089199
-    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: UI
+    uniqueID: 3907089199
     locked: 0
