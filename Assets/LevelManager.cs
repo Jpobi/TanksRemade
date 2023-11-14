@@ -50,7 +50,6 @@ public class LevelManager : MonoBehaviour
     }
 
 
-    // Start is called before the first frame update
     void Start()
     {
         aStar.GetComponent<AstarPath>().graphs[0].GetNodes(node=> { if (node.Walkable) nodes.Add(node); });
@@ -62,7 +61,6 @@ public class LevelManager : MonoBehaviour
         itemsList.Add(new ItemData { cooldown = 0f, isPlaced = true, prefab = Resources.Load<GameObject>("ItemWeapon (Shotgun)") });
     }
 
-    // Update is called once per frame
     void Update()
     {
         for (int i = 0; i < itemsList.Count; i++)

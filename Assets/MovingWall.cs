@@ -8,8 +8,8 @@ public class MovingWall : MonoBehaviour
     public Transform endPosition;
     public float speed = 2.0f;
     public AstarPath aStar;
-    private bool movingToEnd = true;
-    public float scanInterval = 0.5f;
+    private bool haciaFin = true;
+    public float scanInterval = 0.25f;
     public GameObject movableArea;
 
     private void Start()
@@ -22,13 +22,13 @@ public class MovingWall : MonoBehaviour
     {
         float step = speed * Time.deltaTime;
 
-        if (movingToEnd)
+        if (haciaFin)
         {
             transform.position = Vector3.MoveTowards(transform.position, endPosition.position, step);
 
             if (Vector3.Distance(transform.position, endPosition.position) < 0.001f)
             {
-                movingToEnd = false;
+                haciaFin = false;
             }
         }
         else
@@ -37,7 +37,7 @@ public class MovingWall : MonoBehaviour
 
             if (Vector3.Distance(transform.position, startPosition.position) < 0.001f)
             {
-                movingToEnd = true;
+                haciaFin = true;
             }
         }
         
@@ -46,10 +46,8 @@ public class MovingWall : MonoBehaviour
     {
         while (true)
         {
-            // Wait for the specified interval
             yield return new WaitForSeconds(scanInterval);
 
-            // Trigger a graph scan to update the navigation graphs
             //aStar.ScanAsync();
             if (!aStar.IsAnyGraphUpdateQueued && !aStar.IsAnyGraphUpdateInProgress) UpdateGraphRegion();
         }
@@ -60,7 +58,6 @@ public class MovingWall : MonoBehaviour
         Bounds bounds = movableArea.GetComponent<BoxCollider2D>().bounds;
         //GraphUpdateObject guo = new GraphUpdateObject(bounds);
 
-        
         //guo.modifyWalkability = true;
         //guo.setWalkability = false;
 

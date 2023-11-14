@@ -25,6 +25,23 @@ public class EnemyAI : MonoBehaviour
 
     void Update()
     {
+        Aim();
+
+    }
+
+    public void TakeDamage(float damage)
+    {
+        this.health -= damage;
+        healthBar.SetValue(health);
+        if (this.health <= 0)
+        {
+            AssetHelper.ShowText(transform.position, Color.green, 75, "GANASTE!");
+            this.gameObject.SetActive(false);
+        }
+    }
+
+    public void Aim()
+    {
         barrel.transform.position = transform.position;
 
         var desiredVelocity = aiPath.desiredVelocity;
@@ -41,13 +58,6 @@ public class EnemyAI : MonoBehaviour
             targetRotation = Quaternion.LookRotation(Vector3.forward, desiredVelocity);
         }
 
-        // Smoothly interpolate the rotation
         barrel.transform.rotation = Quaternion.Slerp(barrel.transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-    }
-
-    public void TakeDamage(float damage)
-    {
-        this.health -= damage;
-        healthBar.SetValue(health);
     }
 }

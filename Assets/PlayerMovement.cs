@@ -12,6 +12,9 @@ public class PlayerMovement : MonoBehaviour
     
     public float health;
     public float maxHealth = 100;
+    public int vidas = 3;
+
+    public GameObject checkpoint;
 
     public Rigidbody2D rb;
     Vector2 direccionMove;
@@ -88,6 +91,20 @@ public class PlayerMovement : MonoBehaviour
     {
         this.health -= damage;
         healthBar.SetValue(health);
+        if (this.health <= 0)
+        {
+            if (vidas > 0)
+            {
+                vidas -= 1;
+                this.transform.position= checkpoint.transform.position;
+                health = maxHealth;
+                healthBar.SetValue(health);
+            }
+            else
+            {
+                SceneManager.LoadScene("Menu");
+            }
+        }
     }
 
     void FixedUpdate()
