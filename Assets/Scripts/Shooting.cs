@@ -15,6 +15,7 @@ public class Shooting : MonoBehaviour
     {
         weapon = gameObject.AddComponent<BasicWeapon>();
         weapon.Initialize(firePoint.transform);
+        cooldown = weapon.cooldown;
         gameObject.GetComponent<SpriteRenderer>().sprite = weapon.weaponSprite;
         currentCooldown = cooldown;
         cooldownBar.SetMaxValue(cooldown);
@@ -59,6 +60,8 @@ public class Shooting : MonoBehaviour
             Destroy(weapon);
             weapon = (Weapon)gameObject.AddComponent(weaponType);
             weapon.Initialize(firePoint.transform);
+            cooldown = weapon.cooldown;
+            cooldownBar.SetMaxValue(cooldown);
             gameObject.GetComponent<SpriteRenderer>().sprite = weapon.weaponSprite;
             var barrelgfx = gameObject.transform.Find("BarrelGFX");
             if (barrelgfx) barrelgfx.GetComponent<SpriteRenderer>().sprite = weapon.weaponSprite;

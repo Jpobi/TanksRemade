@@ -75,7 +75,11 @@ public class Bullet : MonoBehaviour
             GameObject effect = Instantiate(explosion, transform.position, Quaternion.identity);
             Destroy(effect, 1f);
 
-            if(!(collision.collider.gameObject.layer == LayerMask.NameToLayer("Obstacle"))) AssetHelper.ShowText(transform.position+new Vector3(0,1.5f,0), Color.red,40, damage.ToString());
+            List<string> excludedLayers = new List<string> { "Obstacle", "Projectile" };
+            if (!excludedLayers.Contains(LayerMask.LayerToName(collision.collider.gameObject.layer)))
+            {
+                AssetHelper.ShowText(transform.position + new Vector3(0, 1.5f, 0), Color.red, 40, damage.ToString());
+            }
             Destroy(gameObject);
         }
         if (collision.collider.CompareTag("Deformable"))

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -12,7 +13,8 @@ public class PlayerMovement : MonoBehaviour
     
     public float health;
     public float maxHealth = 100;
-    public int vidas = 3;
+    //public int vidas = 3;
+    public TextMeshProUGUI vidasCounter;
 
     public GameObject checkpoint;
 
@@ -80,12 +82,14 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        //vidas = LevelManager.playerLives;
         health = maxHealth;
         healthBar.SetMaxValue(maxHealth);
         healthBar.SetValue(health);
         currentCooldown = cooldown;
         dashBar.SetMaxValue(cooldown);
         dashBar.SetValue(currentCooldown);
+        vidasCounter.text = "Vidas: " + (LevelManager.playerLives+1);
     }
     public void TakeDamage(float damage)
     {
@@ -93,16 +97,18 @@ public class PlayerMovement : MonoBehaviour
         healthBar.SetValue(health);
         if (this.health <= 0)
         {
-            if (vidas > 0)
+            if (LevelManager.playerLives > 0)
             {
-                vidas -= 1;
+                LevelManager.playerLives -= 1;
+                vidasCounter.text = "Vidas: " + (LevelManager.playerLives + 1);
+                //LevelManager.playerLives = LevelManager.playerLives;
                 this.transform.position= checkpoint.transform.position;
                 health = maxHealth;
                 healthBar.SetValue(health);
             }
             else
             {
-                SceneManager.LoadScene("Menu");
+                SceneManager.LoadScene("Lose");
             }
         }
     }

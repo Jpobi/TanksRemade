@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
 using System.IO;
+using UnityEngine.SceneManagement;
+using UnityEditor;
 
 public class EnemyAI : MonoBehaviour
 {
@@ -15,10 +17,14 @@ public class EnemyAI : MonoBehaviour
     public float maxHealth = 100;
     public float rotationSpeed = 2.0f;
 
+    public LevelManager levelManager;
+
+    //public GameObject target;
     public SliderBar healthBar;
 
     void Start()
     {
+        levelManager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
         health = maxHealth;
         healthBar.SetMaxValue(maxHealth);
     }
@@ -26,7 +32,6 @@ public class EnemyAI : MonoBehaviour
     void Update()
     {
         Aim();
-
     }
 
     public void TakeDamage(float damage)
@@ -35,7 +40,10 @@ public class EnemyAI : MonoBehaviour
         healthBar.SetValue(health);
         if (this.health <= 0)
         {
-            AssetHelper.ShowText(transform.position, Color.green, 75, "GANASTE!");
+            var explosion = Resources.Load<GameObject>("bomb_explosion");
+            GameObject effect = (GameObject)Instantiate(explosion, transform.position, Quaternion.identity);
+            Destroy(effect, 1f);
+            levelManager.enemyDeath();
             this.gameObject.SetActive(false);
         }
     }

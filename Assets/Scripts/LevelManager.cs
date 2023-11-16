@@ -5,12 +5,12 @@ using UnityEngine.SceneManagement;
 using Pathfinding;
 using System;
 using UnityEditor.Experimental.GraphView;
-
+using TMPro;
 
 [System.Serializable]
 public class ItemData
 {
-    public float cooldown = 0f;
+    public float cooldown = 2f;
     public bool isPlaced = true;
     public GameObject prefab;
 }
@@ -28,37 +28,40 @@ public class LevelManager : MonoBehaviour
 
     public GameObject aStar;
 
-    public Transform lastCheckpoint;
+    public Transform lastCheckpoint; 
     public GameObject player;
-    public string currentScene;
+    public string nextScene;
     List<GraphNode> nodes = new List<GraphNode>();
 
+    public static int playerLives=2;
+
     public List<ItemData> itemsList = new List<ItemData>();
-
+    public int nivel;
+    public int totEnemies;
+    public TextMeshProUGUI enemyCounter;
+    public TextMeshProUGUI levelCounter;
     
-    
 
-    public void RespawnPlayer()
+    public void enemyDeath()
     {
-        if (lastCheckpoint)
+        totEnemies=totEnemies-1;
+        enemyCounter.text = "Enemigos: " + totEnemies;
+        if(totEnemies == 0)
         {
-            player.transform.position = lastCheckpoint.position;
-            player.transform.rotation = lastCheckpoint.rotation;
-            return;
+            SceneManager.LoadScene(nextScene);
         }
-        SceneManager.LoadScene(currentScene);
     }
-
 
     void Start()
     {
         aStar.GetComponent<AstarPath>().graphs[0].GetNodes(node=> { if (node.Walkable) nodes.Add(node); });
-
-        itemsList.Add(new ItemData { cooldown = 0f, isPlaced = true, prefab = Resources.Load<GameObject>("ItemUpgrade (DMG)") });
-        itemsList.Add(new ItemData { cooldown = 0f, isPlaced = true, prefab = Resources.Load<GameObject>("ItemUpgrade (Shield)") });
-        itemsList.Add(new ItemData { cooldown = 0f, isPlaced = true, prefab = Resources.Load<GameObject>("ItemUpgrade (SPEED)") });
-        itemsList.Add(new ItemData { cooldown = 0f, isPlaced = true, prefab = Resources.Load<GameObject>("ItemWeapon (Basic)") });
-        itemsList.Add(new ItemData { cooldown = 0f, isPlaced = true, prefab = Resources.Load<GameObject>("ItemWeapon (Shotgun)") });
+        enemyCounter.text = "Enemigos: " + totEnemies;
+        levelCounter.text = "Nivel: " + nivel;
+        itemsList.Add(new ItemData { cooldown = 2f, isPlaced = true, prefab = Resources.Load<GameObject>("ItemUpgrade (DMG)") });
+        itemsList.Add(new ItemData { cooldown = 2f, isPlaced = true, prefab = Resources.Load<GameObject>("ItemUpgrade (Shield)") });
+        itemsList.Add(new ItemData { cooldown = 2f, isPlaced = true, prefab = Resources.Load<GameObject>("ItemUpgrade (SPEED)") });
+        itemsList.Add(new ItemData { cooldown = 2f, isPlaced = true, prefab = Resources.Load<GameObject>("ItemWeapon (Sniper)") });
+        itemsList.Add(new ItemData { cooldown = 2f, isPlaced = true, prefab = Resources.Load<GameObject>("ItemWeapon (Shotgun)") });
     }
 
     void Update()
@@ -76,7 +79,7 @@ public class LevelManager : MonoBehaviour
                 {
                     var position = (Vector3)nodes[UnityEngine.Random.Range(0, nodes.Count)].position;
                     Instantiate(itemsList[i].prefab, position, Quaternion.identity);
-                    itemsList[i].cooldown = 0f;
+                    itemsList[i].cooldown = 2f;
                     itemsList[i].isPlaced = true;
                 }
             }
@@ -85,8 +88,7 @@ public class LevelManager : MonoBehaviour
 
         if (Input.GetButtonDown("Debug Reset"))
         {
-            RespawnPlayer();
-            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 }

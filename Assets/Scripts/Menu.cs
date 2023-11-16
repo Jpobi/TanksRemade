@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour
+public class Menu : MonoBehaviour
 {
     public void Play()
     {
@@ -16,5 +16,11 @@ public class MainMenu : MonoBehaviour
     {
         print("Salí");
         Application.Quit();
+    }
+
+
+    public void LoadMainMenu()
+    {
+        SceneManager.LoadScene("Menu");
     }
 }
