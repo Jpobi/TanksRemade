@@ -73,6 +73,7 @@ public class Bullet : MonoBehaviour
         else
         {
             GameObject effect = Instantiate(explosion, transform.position, Quaternion.identity);
+            FindAnyObjectByType<AudioManager>().Play("Explosion");
             Destroy(effect, 1f);
 
             List<string> excludedLayers = new List<string> { "Obstacle", "Projectile" };

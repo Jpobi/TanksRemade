@@ -5,6 +5,7 @@ using UnityEngine;
 public abstract class Weapon : MonoBehaviour
 {
     public int damage;
+    public int baseDamage;
     public string weaponName;
     public Sprite weaponSprite;
     public Transform firePoint;
@@ -21,6 +22,7 @@ public class BasicWeapon : Weapon
     public override void Initialize(Transform firePoint)
     {
         this.damage = 20;
+        this.baseDamage = this.damage;
         this.weaponName = "Basic Cannon";
         this.weaponSprite = Resources.Load<Sprite>("basic_red");
         this.firePoint = firePoint;
@@ -42,6 +44,7 @@ public class Shotgun : Weapon
     public override void Initialize(Transform firePoint)
     {
         this.damage = 15;
+        this.baseDamage = this.damage;
         this.weaponName = "Shotgun";
         this.weaponSprite = Resources.Load<Sprite>("basic_black");
         this.firePoint = firePoint;
@@ -76,7 +79,8 @@ public class Sniper : Weapon
 {
     public override void Initialize(Transform firePoint)
     {
-        this.damage = 25;
+        this.damage = 30;
+        this.baseDamage = this.damage;
         this.weaponName = "Sniper";
         this.weaponSprite = Resources.Load<Sprite>("basic_blue");
         this.firePoint = firePoint;

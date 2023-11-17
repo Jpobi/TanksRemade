@@ -39,11 +39,13 @@ public class Shooting : MonoBehaviour
         if (parent.tag != "Enemy" && Input.GetButtonDown("Fire1"))
         {
             weapon.Shoot();
+            FindAnyObjectByType<AudioManager>().Play("Shoot");
             currentCooldown = cooldown;
         }
         else if (parent.tag == "Enemy")
         {
             weapon.Shoot();
+            FindAnyObjectByType<AudioManager>().Play("Shoot");
             currentCooldown = cooldown;
         }
         cooldownBar.SetValue(currentCooldown);
@@ -57,9 +59,11 @@ public class Shooting : MonoBehaviour
 
         if (weaponType != null && typeof(Weapon).IsAssignableFrom(weaponType))
         {
+            var weaponBuff = weapon.damage - weapon.baseDamage;
             Destroy(weapon);
             weapon = (Weapon)gameObject.AddComponent(weaponType);
             weapon.Initialize(firePoint.transform);
+            weapon.damage += weaponBuff;
             cooldown = weapon.cooldown;
             cooldownBar.SetMaxValue(cooldown);
             gameObject.GetComponent<SpriteRenderer>().sprite = weapon.weaponSprite;
@@ -68,7 +72,7 @@ public class Shooting : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Weapon subclass with the specified name not found.");
+            Debug.LogError("Tipo de arma no encontrada.");
         }
     }
 }

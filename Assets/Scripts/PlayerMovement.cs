@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -31,8 +33,10 @@ public class PlayerMovement : MonoBehaviour
 
     //dash
     public SliderBar dashBar;
-    public float cooldown = 3f;
+    public float cooldown = 6f; //cooldown de Dash
     public float currentCooldown;
+    public AudioManager audio;
+
     void Update()
     {
         //shield
@@ -73,6 +77,18 @@ public class PlayerMovement : MonoBehaviour
             rb.rotation += -Input.GetAxisRaw("Horizontal Left " + playerNum) * actualRotatSpeed;
         
             direccionMove = AssetHelper.DegreeToVector2(rb.rotation)* Input.GetAxisRaw("Vertical Left " + playerNum);
+            
+            if (Input.GetAxisRaw("Vertical Left " + playerNum) == 0)
+            {
+                audio.Stop("TankMove");
+            }
+            else
+            {
+                Sound s = Array.Find(audio.sounds, item => item.name == "TankMove");
+                if (s != null && !s.source.isPlaying){
+                        audio.Play("TankMove");
+                }
+            }
         }
 
 
@@ -123,7 +139,7 @@ public class PlayerMovement : MonoBehaviour
 
     private IEnumerator ReduceSpeed()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(3f); //<-- duración dash
 
         speed -= 2f;
     }

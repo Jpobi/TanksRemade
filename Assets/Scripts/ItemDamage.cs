@@ -6,6 +6,6 @@ public class ItemDamage : Item
 {
     protected override void ApplyTo(GameObject go)
     {
-        go.GetComponentInChildren<Shooting>().weapon.damage += 25;
+        go.GetComponentInChildren<Shooting>().weapon.damage += 15;
     }
 }
