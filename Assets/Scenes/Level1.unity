@@ -34512,7 +34512,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2.5
-  rotatSpeed: 0.3
+  rotatSpeed: 2
   health: 100
   maxHealth: 100
   vidasCounter: {fileID: 1735677035}

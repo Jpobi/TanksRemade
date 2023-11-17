@@ -11,7 +11,7 @@ using UnityEngine.SceneManagement;
 public class PlayerMovement : MonoBehaviour
 {
     public float speed = 2.5f;
-    public float rotatSpeed = 0.5f;
+    public float rotatSpeed = 3f;
     
     public float health;
     public float maxHealth = 100;
@@ -69,35 +69,28 @@ public class PlayerMovement : MonoBehaviour
             currentCooldown = cooldown;
         }
         dashBar.SetValue(currentCooldown);
-        
 
-        if (playerNum != null && playerNum!="")
+
+        //tankthreads audio
+        if (Input.GetAxisRaw("Vertical Left " + playerNum) == 0)
         {
-            var actualRotatSpeed = (Input.GetAxisRaw("Vertical Left " + playerNum) != 0 ? rotatSpeed * 0.7f : rotatSpeed);
-            rb.rotation += -Input.GetAxisRaw("Horizontal Left " + playerNum) * actualRotatSpeed;
-        
-            direccionMove = AssetHelper.DegreeToVector2(rb.rotation)* Input.GetAxisRaw("Vertical Left " + playerNum);
-            
-            if (Input.GetAxisRaw("Vertical Left " + playerNum) == 0)
+            audio.Stop("TankMove");
+        }
+        else
+        {
+            Sound s = Array.Find(audio.sounds, item => item.name == "TankMove");
+            if (s != null && !s.source.isPlaying)
             {
-                audio.Stop("TankMove");
-            }
-            else
-            {
-                Sound s = Array.Find(audio.sounds, item => item.name == "TankMove");
-                if (s != null && !s.source.isPlaying){
-                        audio.Play("TankMove");
-                }
+                audio.Play("TankMove");
             }
         }
-
-
         //direccionMove.x = Input.GetAxisRaw("Horizontal Left 1");
         //direccionMove.y = Input.GetAxisRaw("Vertical Left 1");
     }
 
     private void Start()
     {
+        audio = FindAnyObjectByType<AudioManager>();
         //vidas = LevelManager.playerLives;
         health = maxHealth;
         healthBar.SetMaxValue(maxHealth);
@@ -131,6 +124,15 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (playerNum != null && playerNum != "")
+        {
+            var actualRotatSpeed = (Input.GetAxisRaw("Vertical Left " + playerNum) != 0 ? rotatSpeed * 0.7f : rotatSpeed);
+            rb.rotation += -Input.GetAxisRaw("Horizontal Left " + playerNum) * actualRotatSpeed;
+
+            direccionMove = AssetHelper.DegreeToVector2(rb.rotation) * Input.GetAxisRaw("Vertical Left " + playerNum);
+        }
+
+
         if (playerNum != null && playerNum!="")
         {
             rb.MovePosition(rb.position + direccionMove * speed * Time.fixedDeltaTime);
