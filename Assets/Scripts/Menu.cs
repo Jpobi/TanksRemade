@@ -9,6 +9,11 @@ public class Menu : MonoBehaviour
     {
         {
             SceneManager.LoadScene("Level1");
+            LevelManager lvlmg = FindAnyObjectByType<LevelManager>();
+            if (lvlmg != null)
+            {
+                LevelManager.playerLives = 2;
+            }
         }
     }
 

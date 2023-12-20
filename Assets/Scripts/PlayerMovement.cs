@@ -76,12 +76,12 @@ public class PlayerMovement : MonoBehaviour
         //tankthreads audio
         if (Input.GetAxisRaw("Vertical Left " + playerNum) == 0)
         {
-            audio.Stop("TankMove");
+            audio?.Stop("TankMove");
         }
         else
         {
             Sound s = Array.Find(audio.sounds, item => item.name == "TankMove");
-            if (s != null && !s.source.isPlaying)
+            if (s != null && s.source!=null && !s.source.isPlaying)
             {
                 audio.Play("TankMove");
             }

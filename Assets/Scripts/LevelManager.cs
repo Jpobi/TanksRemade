@@ -79,6 +79,13 @@ public class LevelManager : MonoBehaviour
 
     void Start()
     {
+        if (SceneManager.GetActiveScene().name == "Level1")
+        {
+            if (LevelManager.playerLives <2)
+            {
+                LevelManager.playerLives = 2;
+            }
+        }
         aStar.GetComponent<AstarPath>().graphs[0].GetNodes(node=> { if (node.Walkable) nodes.Add(node); });
         enemyCounter.text = "Enemigos: " + totEnemies;
         levelCounter.text = "Nivel: " + nivel;
