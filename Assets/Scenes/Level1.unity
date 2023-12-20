@@ -33233,7 +33233,7 @@ MonoBehaviour:
   aStar: {fileID: 183831245}
   lastCheckpoint: {fileID: 664210844}
   player: {fileID: 1409643482}
-  nextScene: Level2
+  nextScene: Level1.5
   itemsList: []
   nivel: 1
   totEnemies: 1
