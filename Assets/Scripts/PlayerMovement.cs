@@ -37,6 +37,8 @@ public class PlayerMovement : MonoBehaviour
     public float currentCooldown;
     public AudioManager audio;
 
+    public LevelManager lvl;
+
     void Update()
     {
         //shield
@@ -87,10 +89,16 @@ public class PlayerMovement : MonoBehaviour
         //direccionMove.x = Input.GetAxisRaw("Horizontal Left 1");
         //direccionMove.y = Input.GetAxisRaw("Vertical Left 1");
     }
+    private void Awake()
+    {
+        audio = FindAnyObjectByType<AudioManager>();
+        lvl= FindAnyObjectByType<LevelManager>();
+    }
 
     private void Start()
     {
         audio = FindAnyObjectByType<AudioManager>();
+        lvl = FindAnyObjectByType<LevelManager>()??LevelManager.Instance;
         //vidas = LevelManager.playerLives;
         health = maxHealth;
         healthBar.SetMaxValue(maxHealth);
@@ -108,7 +116,8 @@ public class PlayerMovement : MonoBehaviour
         {
             if (LevelManager.playerLives > 0)
             {
-                LevelManager.playerLives -= 1;
+                //LevelManager.playerLives -= 1;
+                lvl.updateLives(LevelManager.playerLives-1);
                 vidasCounter.text = "Vidas: " + (LevelManager.playerLives + 1);
                 //LevelManager.playerLives = LevelManager.playerLives;
                 this.transform.position= checkpoint.transform.position;

@@ -19,7 +19,7 @@ public class LevelManager : MonoBehaviour
     #region Sigleton
 
     private static LevelManager _instance;
-    private static LevelManager Instance
+    public static LevelManager Instance
     {
         get { return _instance ??= FindObjectOfType<LevelManager>(); }
     }
@@ -39,6 +39,9 @@ public class LevelManager : MonoBehaviour
     public int totEnemies;
     public TextMeshProUGUI enemyCounter;
     public TextMeshProUGUI levelCounter;
+    public GameObject heartsCounter;
+    public GameObject heartPrefab;
+    public float offset = 1.5f;
     
 
     public void enemyDeath()
@@ -48,6 +51,29 @@ public class LevelManager : MonoBehaviour
         if(totEnemies == 0)
         {
             SceneManager.LoadScene(nextScene);
+        }
+    }
+
+    public void updateLives(int lives)
+    {
+        playerLives=lives;
+        UpdateHearts();
+    }
+
+    void UpdateHearts()
+    {
+        int heartsDifference = heartsCounter.transform.childCount - (playerLives+1);
+
+        for (int i = 0; i < heartsDifference; i++)
+        {
+            Destroy(heartsCounter.transform.GetChild(heartsCounter.transform.childCount-1-i).gameObject);
+        }
+
+        for (int i = heartsCounter.transform.childCount; i < playerLives+1; i++)
+        {
+            float xPosition =-1.8f + i * offset;
+            var newHeart=Instantiate(heartPrefab, heartsCounter.transform);
+            newHeart.transform.SetLocalPositionAndRotation(new Vector3(xPosition, 0, 0),Quaternion.identity);
         }
     }
 
@@ -61,6 +87,7 @@ public class LevelManager : MonoBehaviour
         itemsList.Add(new ItemData { cooldown = 2f, isPlaced = true, prefab = Resources.Load<GameObject>("ItemUpgrade (SPEED)") });
         itemsList.Add(new ItemData { cooldown = 2f, isPlaced = true, prefab = Resources.Load<GameObject>("ItemWeapon (Sniper)") });
         itemsList.Add(new ItemData { cooldown = 2f, isPlaced = true, prefab = Resources.Load<GameObject>("ItemWeapon (Shotgun)") });
+        UpdateHearts();
     }
 
     void Update()
